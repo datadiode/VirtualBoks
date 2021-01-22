@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 6.1.18-r142142-{build}
 image: Visual Studio 2015
 build_script:
   - ps: >-
@@ -29,3 +29,6 @@ build_script:
       date;
       [System.IO.File]::WriteAllBytes("$WorkFolder\Out\VirtualBoks-6.1.18-r142142.msi", $BinDump);
       date;
+
+artifacts:
+  - path: Out/VirtualBoks-6.1.18-r142142.msi
