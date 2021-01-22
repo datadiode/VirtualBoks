@@ -5,7 +5,7 @@ build_script:
       Add-Type -Namespace PKI -Name Crypt32 -MemberDefinition @"
         [DllImport("Crypt32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool CryptStringToBinary(string pszString, int cchString, int dwFlags, byte[] pbBinary, ref int pcbBinary, ref int pdwSkip, ref int pdwFlags);
-      "@
+      "@;
 
       Function Convert-HexToByteArray([string] $HexString)
       {
@@ -13,19 +13,19 @@ build_script:
         $Bytes = [byte[]]::new($Size)
         [void][PKI.Crypt32]::CryptStringToBinary($HexString, $HexString.Length, 8, $Bytes, [ref] $Size, [ref] 0, [ref] 0)
         $Bytes
-      }
+      };
 
       Invoke-WebRequest -Uri "https://download.virtualbox.org/virtualbox/6.1.18/VirtualBox-6.1.18-142142-Win.exe" -OutFile "VirtualBoxSetup.exe";
-      $WorkFolder = (Get-Item .).FullName
-      ./VirtualBoxSetup.exe -extract -silent -path "$WorkFolder\Out" | Out-Null
-      $VBoxExtPackHelperAppExe = [System.BitConverter]::ToString([System.Text.Encoding]::UTF8.GetBytes('VBoxExtPackHelperApp.exe'))
-      $VBoxExtPackHelperAppNop = [System.BitConverter]::ToString([System.Text.Encoding]::UTF8.GetBytes('VBoxExtPackHelperApp.nop'))
-      date
-      $HexDump = [System.BitConverter]::ToString([System.IO.File]::ReadAllBytes("$WorkFolder\Out\VirtualBox-6.1.18-r142142.msi"))
-      date
-      $HexDump = $HexDump -replace "$VBoxExtPackHelperAppExe", "$VBoxExtPackHelperAppNop"
-      date
-      $BinDump = Convert-HexToByteArray($HexDump)
-      date
-      [System.IO.File]::WriteAllBytes("$WorkFolder\Out\VirtualBoks-6.1.18-r142142.msi", $BinDump)
-      date
+      $WorkFolder = (Get-Item .).FullName;
+      ./VirtualBoxSetup.exe -extract -silent -path "$WorkFolder\Out" | Out-Null;
+      $VBoxExtPackHelperAppExe = [System.BitConverter]::ToString([System.Text.Encoding]::UTF8.GetBytes('VBoxExtPackHelperApp.exe'));
+      $VBoxExtPackHelperAppNop = [System.BitConverter]::ToString([System.Text.Encoding]::UTF8.GetBytes('VBoxExtPackHelperApp.nop'));
+      date;
+      $HexDump = [System.BitConverter]::ToString([System.IO.File]::ReadAllBytes("$WorkFolder\Out\VirtualBox-6.1.18-r142142.msi"));
+      date;
+      $HexDump = $HexDump -replace "$VBoxExtPackHelperAppExe", "$VBoxExtPackHelperAppNop";
+      date;
+      $BinDump = Convert-HexToByteArray($HexDump);
+      date;
+      [System.IO.File]::WriteAllBytes("$WorkFolder\Out\VirtualBoks-6.1.18-r142142.msi", $BinDump);
+      date;
